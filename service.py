@@ -20,6 +20,9 @@ load_dotenv()
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
+chrome_options.add_argument("--headless")  # GUI 없이 실행
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 
 def click_button_by_xpath(driver, xpath, log=None, data=None, key=None):
     try:
