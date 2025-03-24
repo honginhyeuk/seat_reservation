@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>좌석 및 사용자 정보</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        button.user-btn {
+            background-color: #17a2b8;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h2>현재 등록된 좌석</h2>
+        {% if seat_keys %}
+            {% for seat in seat_keys %}
+                <button>{{ seat }}</button>
+            {% endfor %}
+        {% else %}
+            <p>등록된 좌석 정보가 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>현재 등록된 사용자 (사번)</h2>
+        {% if user_keys %}
+            {% for user in user_keys %}
+                <button class="user-btn">{{ user }}</button>
+            {% endfor %}
+        {% else %}
+            <p>등록된 사용자 정보가 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <br>
+    <a href="{{ url_for('index') }}">메인으로 돌아가기</a>
+</body>
+</html>

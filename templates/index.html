@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>좌석 예약 프로그램</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"], a {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: calc(100% - 22px);
+        }
+        button[type="submit"]:hover, a:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .message {
+            color: green;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        li {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        form button[type="button"],
+        form button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+        form button[type="button"]:hover,
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>좌석 예약</h1>
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+    <p class="message">{{ message }}</p>
+    {% endif %}
+    <form method="POST">
+        <div>
+            <label for="user">사번:</label>
+            <input type="text" id="user" name="user" required placeholder="예: 202301560">
+        </div>
+        <div>
+            <label for="seat">좌석:</label>
+            <input type="text" id="seat" name="seat" required placeholder="예: A10">
+        </div>
+        <div>
+            <label for="reserve_time">예약 시간 (YYYY-MM-DD HH:MM):</label>
+            <input type="datetime-local" id="reserve_time" name="reserve_time" required>
+        </div>
+        <button type="submit">예약 스케줄</button>
+        <a href="{{ url_for('seat_info') }}" >
+            
+                등록된 좌석 및 사용자 현황 보기
+        </a>
+    </form>
+    
+    <h2>예약 상태</h2>
+    <ul>
+        {% for alert in alerts %}
+        <li>{{ alert }}</li>
+        {% endfor %}
+    </ul>
+    <div style="text-align:center; margin-top: 15px;">
+        <a href="/shutdown_scheduler" style="text-decoration: none;">
+            <button style="padding:10px 15px; border:none; border-radius:4px; background-color:#dc3545; color:white; cursor:pointer; width: calc(100% - 22px); max-width: 400px;">
+                스케줄러 종료
+            </button>
+        </a>
+    </div>    
+    <h2>스케줄러 현황</h2>
+    <div style="text-align:center; margin-top: 15px;">
+        <a href="/cancel_all_reservations" style="text-decoration: none;">
+            <button style="padding:10px 15px; border:none; border-radius:4px; background-color:#ffc107; color:white; cursor:pointer; width: calc(100% - 22px); max-width: 400px;">
+                모든 예약 취소
+            </button>
+        </a>
+    </div>
+    <!-- <a href="/cancel_all_reservations">모든 예약 취소</a> -->
+    {% if scheduled_jobs %}
+    <table border="1" style="margin:0 auto; width:90%; max-width:600px; border-collapse:collapse;">
+        <thead>
+            <tr style="background-color:#007bff; color:white;">
+                <th>사번 (User)</th>
+                <th>좌석 (Seat)</th>
+                <th>예약 시간 (Reserve Time)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in scheduled_jobs %}
+            <tr>
+                <td style="padding:8px; text-align:center;">{{ job.user }}</td>
+                <td style="padding:8px; text-align:center;">{{ job.seat }}</td>
+                <td style="padding:8px; text-align:center;">{{ job.reserve_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center;">현재 스케줄된 예약이 없습니다.</p>
+    {% endif %}
+</body>
+</html>
