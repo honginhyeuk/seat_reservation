@@ -20,7 +20,7 @@ load_dotenv()
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
-chrome_options.add_argument("--headless")  # GUI 없이 실행
+chrome_options.add_argument("--headless")  
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 
@@ -121,7 +121,7 @@ def perform_reservation(seat, user ,reserve_time_str):
     driver = webdriver.Chrome(options=chrome_options)
     reservation_messages = []
     try:
-        driver.get(os.environ.get('SMARTOFFICE_URL'))
+        driver.get('https://smartoffice.hsnc.co.kr/index.do')
         userpw = get_user_code(user)
         userid = user
         login_messages = login(driver,userid,userpw)
